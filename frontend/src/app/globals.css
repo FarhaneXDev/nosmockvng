@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0b0f17;
+  --foreground: #f8fafc;
+  --card-bg: #131c2e;
+  --border-color: #1e293b;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  min-height: 100vh;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Glassmorphism helpers */
+.glass-panel {
+  background: rgba(19, 28, 46, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-hover {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-panel-hover:hover {
+  border-color: rgba(34, 197, 94, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+}
+
+/* Breathing animation ring */
+@keyframes breathCycle {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+  }
+  40% {
+    transform: scale(1.4);
+    box-shadow: 0 0 50px rgba(34, 197, 94, 0.6);
+  }
+  60% {
+    transform: scale(1.4);
+    box-shadow: 0 0 50px rgba(34, 197, 94, 0.6);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+  }
+}
+
+.animate-breathing-ring {
+  animation: breathCycle 10s ease-in-out infinite;
+}
