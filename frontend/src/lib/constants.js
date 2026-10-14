@@ -118,6 +118,58 @@ export const CURRENCIES = [
   { code: 'CAD', symbol: '$', label: 'Dollar Canadien ($)' },
 ];
 
+export const DEFAULT_MILESTONES = [
+  {
+    title: "20 minutes",
+    label: "Pression artérielle & pulsation",
+    desc: "La pression sanguine et le rythme cardiaque redeviennent normaux.",
+    progress: 100,
+    unlocked: true,
+  },
+  {
+    title: "8 heures",
+    label: "Oxygénation du sang",
+    desc: "Le monoxyde de carbone dans le sang diminue de moitié ; l'oxygénation cellulaire se normalise.",
+    progress: 100,
+    unlocked: true,
+  },
+  {
+    title: "24 heures",
+    label: "Élimination des résidus",
+    desc: "Les poumons commencent à évacuer le mucus et les résidus de fumée.",
+    progress: 100,
+    unlocked: true,
+  },
+  {
+    title: "48 heures",
+    label: "Goût et odorat",
+    desc: "La nicotine est presque entièrement éliminée du corps ; les terminaisons nerveuses du goût se réveillent.",
+    progress: 60,
+    unlocked: false,
+  },
+  {
+    title: "72 heures",
+    label: "Respiration décuplée",
+    desc: "Les bronches se relâchent, respirer devient plus facile et le tonus énergétique augmente.",
+    progress: 30,
+    unlocked: false,
+  },
+  {
+    title: "2 semaines",
+    label: "Circulation et endurance",
+    desc: "La circulation sanguine globale s'améliore, l'effort physique devient plus aisé.",
+    progress: 10,
+    unlocked: false,
+  },
+  {
+    title: "1 mois",
+    label: "Capacité pulmonaire",
+    desc: "La toux et la fatigue diminuent, les cils bronchiques repoussent et protègent contre les infections.",
+    progress: 5,
+    unlocked: false,
+  },
+];
+
 export const DEFAULT_STRATEGIES = [
   {
     id: 1,

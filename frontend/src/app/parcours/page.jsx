@@ -26,15 +26,13 @@ export default function ParcoursPage() {
     async function loadJourney() {
       try {
         const data = await api.getJourney();
-        if (data && data.length > 0) {
+        if (data && Array.isArray(data) && data.length > 0) {
           setDays(data);
           const firstUncompleted = data.find(d => !d.completed) || data[0];
-          setActiveDay(firstUncompleted);
+          if (firstUncompleted) setActiveDay(firstUncompleted);
         }
       } catch (e) {
         console.error(e);
-      } finally {
-        setLoading(false);
       }
     }
     loadJourney();
@@ -45,7 +43,8 @@ export default function ParcoursPage() {
       const res = await api.toggleJourneyDay(dayNumber);
       const isCompletedNow = res?.completed ?? !days.find(d => d.day_number === dayNumber)?.completed;
 
-      setDays(days.map(d => d.day_number === dayNumber ? { ...d, completed: isCompletedNow } : d));
+      const updated = days.map(d => d.day_number === dayNumber ? { ...d, completed: isCompletedNow } : d);
+      setDays(updated);
 
       if (activeDay && activeDay.day_number === dayNumber) {
         setActiveDay({ ...activeDay, completed: isCompletedNow });
@@ -72,12 +71,17 @@ export default function ParcoursPage() {
     { id: 'Phase 5', title: 'Phase 5 : J22-30 (Liberté)' },
   ];
 
-  const filteredDays = selectedPhase === 'all'
-    ? days
-    : days.filter(d => d.phase_title?.includes(selectedPhase));
+  const activeDaysList = (days && Array.isArray(days) && days.length > 0) ? days : DEFAULT_JOURNEY_DAYS;
+  const currentActiveDay = activeDay || activeDaysList[0];
 
-  const completedCount = days.filter(d => d.completed).length;
-  const progressPercent = Math.round((completedCount / (days.length || 30)) * 100);
+  const filteredDays = selectedPhase === 'all'
+    ? activeDaysList
+    : activeDaysList.filter(d => (d.phase_title || '').toLowerCase().includes(selectedPhase.toLowerCase()));
+
+  const displayList = filteredDays.length > 0 ? filteredDays : activeDaysList;
+
+  const completedCount = activeDaysList.filter(d => d.completed).length;
+  const progressPercent = Math.round((completedCount / (activeDaysList.length || 30)) * 100);
 
   return (
     <div className="space-y-6 sm:space-y-8 animate-fadeIn pb-12">
@@ -101,7 +105,7 @@ export default function ParcoursPage() {
           <div className="flex justify-between items-center text-xs">
             <span className="font-semibold text-slate-400">Progression</span>
             <span className="font-mono font-bold text-emerald-400 text-sm">
-              {completedCount} / {days.length || 30} jours
+              {completedCount} / {activeDaysList.length || 30} jours
             </span>
           </div>
           <div className="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
@@ -117,7 +121,7 @@ export default function ParcoursPage() {
       </div>
 
       {/* Featured Active Day Card */}
-      {activeDay && (
+      {currentActiveDay && (
         <div className="p-5 sm:p-8 rounded-3xl bg-slate-900 border border-emerald-500/30 shadow-xl space-y-4 relative overflow-hidden">
           <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none hidden sm:block">
             <Award className="w-40 h-40 text-emerald-400" />
@@ -126,22 +130,22 @@ export default function ParcoursPage() {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
             <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
               <span className="px-3 py-1 rounded-full text-xs font-black bg-emerald-500 text-slate-950 font-mono">
-                Jour {activeDay.day_number}
+                Jour {currentActiveDay.day_number}
               </span>
               <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
-                {activeDay.phase_title}
+                {currentActiveDay.phase_title}
               </span>
             </div>
 
             <button
-              onClick={() => handleToggleDay(activeDay.day_number)}
+              onClick={() => handleToggleDay(currentActiveDay.day_number)}
               className={`w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
-                activeDay.completed
+                currentActiveDay.completed
                   ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
                   : 'bg-emerald-500 hover:bg-emerald-600 text-slate-950 shadow-md shadow-emerald-500/20 active:scale-95'
               }`}
             >
-              {activeDay.completed ? (
+              {currentActiveDay.completed ? (
                 <>
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                   <span>Jour validé (annuler)</span>
@@ -156,11 +160,11 @@ export default function ParcoursPage() {
           </div>
 
           <h2 className="text-xl sm:text-2xl font-black text-white">
-            {activeDay.title}
+            {currentActiveDay.title}
           </h2>
 
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-3xl">
-            {activeDay.summary}
+            {currentActiveDay.summary}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 pt-2">
@@ -169,7 +173,7 @@ export default function ParcoursPage() {
                 Action concrète du jour
               </span>
               <p className="text-xs sm:text-sm text-slate-200">
-                {activeDay.action_today}
+                {currentActiveDay.action_today}
               </p>
             </div>
 
@@ -178,7 +182,7 @@ export default function ParcoursPage() {
                 Mantra de protection
               </span>
               <p className="text-xs sm:text-sm text-slate-200 italic">
-                « {activeDay.mantra} »
+                « {currentActiveDay.mantra} »
               </p>
             </div>
           </div>
@@ -204,8 +208,8 @@ export default function ParcoursPage() {
 
       {/* Grid of All 30 Days */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
-        {filteredDays.map((d) => {
-          const isSelected = activeDay?.day_number === d.day_number;
+        {displayList.map((d) => {
+          const isSelected = currentActiveDay?.day_number === d.day_number;
 
           return (
             <div

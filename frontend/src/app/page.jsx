@@ -17,13 +17,13 @@ import SmokeFreeTimer from '@/components/SmokeFreeTimer';
 import StatCard from '@/components/StatCard';
 import MilestoneTracker from '@/components/MilestoneTracker';
 import { api } from '@/lib/api';
-import { MANTRAS, DEFAULT_USER_PROFILE } from '@/lib/constants';
+import { MANTRAS, DEFAULT_USER_PROFILE, DEFAULT_JOURNEY_DAYS, DEFAULT_MILESTONES } from '@/lib/constants';
 
 export default function DashboardPage() {
   const [profile, setProfile] = useState(DEFAULT_USER_PROFILE);
   const [stats, setStats] = useState(null);
   const [todayCheckin, setTodayCheckin] = useState(null);
-  const [journeyDays, setJourneyDays] = useState([]);
+  const [journeyDays, setJourneyDays] = useState(DEFAULT_JOURNEY_DAYS);
   const [recentCravings, setRecentCravings] = useState([]);
   const [mantraIndex, setMantraIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -250,7 +250,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Health Milestones */}
-      <MilestoneTracker milestones={stats?.milestones} />
+      <MilestoneTracker milestones={stats?.milestones || DEFAULT_MILESTONES} />
 
       {/* 4 Quick Access Touch Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
