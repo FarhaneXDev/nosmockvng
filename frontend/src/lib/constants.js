@@ -2,7 +2,8 @@ export const DEFAULT_USER_PROFILE = {
   cigarettes_per_day: 15,
   smoking_duration_years: 3.0,
   first_cigarette_delay_minutes: 45,
-  pack_price: 12.00,
+  pack_price: 1200,
+  currency: 'FCFA',
   cigarettes_per_pack: 20,
   quit_start_at: "2026-10-14T08:00:00",
   triggers: ["stress", "nervosite", "emotion_brusque", "solitude", "reveil", "travail", "repas", "main_bouche"],
@@ -22,10 +23,10 @@ export const TRIGGERS_CONFIG = {
     label: "Nervosité & Agitation",
     color: "from-amber-500/20 to-orange-600/20 text-amber-300 border-amber-500/30",
     icon: "Activity",
-    quickAction: "Secouer les bras, respirer en cohérence cardiaque et boire un grand verre d'eau.",
+    quickAction: "Secouer les bras, respirer en cohérence cardiaque et boire un grand verre d'eau fraîche.",
   },
   emotion_brusque: {
-    label: "Émotion vive ou blessure",
+    label: "Émotion vive / Tristesse",
     color: "from-purple-500/20 to-indigo-600/20 text-purple-300 border-purple-500/30",
     icon: "HeartCrack",
     quickAction: "Différer toute décision de 10 min, écrire ce que l'on ressent sans l'envoyer, appeler une personne sûre.",
@@ -46,25 +47,25 @@ export const TRIGGERS_CONFIG = {
     label: "Pause ou Travail",
     color: "from-emerald-500/20 to-teal-600/20 text-emerald-300 border-emerald-500/30",
     icon: "Briefcase",
-    quickAction: "Pause debout, étirement, verre d'eau fraîche, objet en main. Dire : « J'ai arrêté, je fais une pause autrement. »",
+    quickAction: "Pause debout, étirement, verre d'eau fraîche. Dire : « J'ai arrêté, je fais une pause autrement. »",
   },
   repas: {
     label: "Avant ou après repas",
     color: "from-orange-500/20 to-red-600/20 text-orange-300 border-orange-500/30",
     icon: "Utensils",
-    quickAction: "Ne pas attendre affamé. Quitter la table dès la fin et se brosser les dents avec un dentifrice très frais.",
+    quickAction: "Ne pas attendre affamé. Quitter la table dès la fin et se brosser les dents avec un dentifrice mentholé très frais.",
   },
   main_bouche: {
     label: "Geste main-bouche",
     color: "from-teal-500/20 to-cyan-600/20 text-teal-300 border-teal-500/30",
     icon: "Sparkles",
-    quickAction: "Chewing-gum mentholé sans sucre, paille réutilisable, galet anti-stress ou stylo à manipuler.",
+    quickAction: "Chewing-gum mentholé sans sucre, cure-dent propre, galet anti-stress ou stylo à manipuler.",
   },
   social: {
-    label: "Soirée & Social",
+    label: "Soirée & Amis",
     color: "from-pink-500/20 to-rose-600/20 text-pink-300 border-pink-500/30",
     icon: "Users",
-    quickAction: "Garder un verre d'eau pétillante ou un objet en main. S'éloigner du groupe fumeurs quelques minutes.",
+    quickAction: "Garder un verre d'eau fraîche ou un jus en main. S'éloigner du groupe fumeurs quelques minutes.",
   },
   autre: {
     label: "Autre déclencheur",
@@ -76,25 +77,27 @@ export const TRIGGERS_CONFIG = {
 
 export const SUPPORT_SERVICES = [
   {
-    name: "Tabac Info Service",
-    number: "39 89",
-    description: "Ligne nationale d'aide à l'arrêt du tabac, conseils de tabacologues spécialisés (appel gratuit du lundi au samedi de 8h à 20h).",
-    badge: "Service public gratuit",
+    name: "Ligne Verte Santé Bénin",
+    number: "136",
+    description: "Numéro vert gratuit du Ministère de la Santé du Bénin pour information, conseils sanitaires et orientation.",
+    badge: "Bénin · Appel gratuit",
+    url: "https://sante.gouv.bj",
+  },
+  {
+    name: "SAMU Bénin / Urgences Nationales",
+    number: "112",
+    altNumber: "+229 95 36 11 04",
+    description: "Service d'assistance médicale d'urgence et secours en cas de détresse ou de malaise sévère.",
+    badge: "24h/24 · Urgences Bénin",
+    url: null,
+  },
+  {
+    name: "Tabac Info Écoute",
+    number: "+33 1 44 93 51 00",
+    altNumber: "39 89",
+    description: "Accompagnement et conseils de spécialistes et tabacologues certifiés.",
+    badge: "Spécialistes Sevrage",
     url: "https://www.tabac-info-service.fr",
-  },
-  {
-    name: "3114 — Prévention Détresse",
-    number: "3114",
-    description: "Numéro national d'écoute en cas de détresse psychologique importante ou de crise, accessible 24h/24 et 7j/7.",
-    badge: "24h/24 · Gratuit",
-    url: "https://3114.fr",
-  },
-  {
-    name: "Fil Santé Jeunes",
-    number: "0 800 235 236",
-    description: "Écoute anonyme, bienveillante et sans jugement.",
-    badge: "Anonyme · Gratuit",
-    url: "https://www.filsantejeunes.com",
   },
 ];
 
@@ -106,4 +109,11 @@ export const MANTRAS = [
   "Demain, je ne négocie pas avec l'envie. J'attends 10 minutes, je bouge, je respire et je choisis à nouveau.",
   "La liberté a bien meilleur goût que la fumée.",
   "Je suis plus fort que quelques secondes d'illusion chimique.",
+];
+
+export const CURRENCIES = [
+  { code: 'FCFA', symbol: 'FCFA', label: 'Franc CFA (Bénin / UEMOA)' },
+  { code: 'EUR', symbol: '€', label: 'Euro (€)' },
+  { code: 'USD', symbol: '$', label: 'Dollar US ($)' },
+  { code: 'CAD', symbol: '$', label: 'Dollar Canadien ($)' },
 ];

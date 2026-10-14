@@ -14,8 +14,9 @@ class UserProfile(models.Model):
     smoking_duration_years = models.DecimalField(max_digits=4, decimal_places=1, default=3.0, help_text="Nombre d'années de tabagisme")
     first_cigarette_delay_minutes = models.PositiveIntegerField(default=45, help_text="Délai moyen après le réveil (minutes)")
     
-    # Coût
-    pack_price = models.DecimalField(max_digits=6, decimal_places=2, default=12.00, help_text="Prix moyen du paquet en euros")
+    # Coût et monnaie (par défaut FCFA pour le Bénin)
+    pack_price = models.DecimalField(max_digits=10, decimal_places=2, default=1200.00, help_text="Prix moyen du paquet en monnaie locale")
+    currency = models.CharField(max_length=10, default="FCFA", help_text="Monnaie utilisée (ex: FCFA, EUR, USD)")
     cigarettes_per_pack = models.PositiveIntegerField(default=20, help_text="Nombre de cigarettes par paquet")
     
     # Date d'arrêt officiel (par défaut mercredi 14 octobre 2026 à 08:00)
@@ -37,11 +38,12 @@ class UserProfile(models.Model):
     privacy_consent = models.BooleanField(default=True)
 
     def daily_cost_estimate(self):
-        """Estimation du coût journalier en euros."""
+        """Estimation du coût journalier en monnaie locale."""
         if self.cigarettes_per_pack > 0:
             price_per_cigarette = float(self.pack_price) / float(self.cigarettes_per_pack)
-            return round(price_per_cigarette * self.cigarettes_per_day, 2)
-        return 0.0
+            cost = price_per_cigarette * self.cigarettes_per_day
+            return round(cost) if self.currency == 'FCFA' else round(cost, 2)
+        return 0
 
     def __str__(self):
         return f"Profil utilisateur (Arrêt prévu : {self.quit_start_at.strftime('%d/%m/%Y %H:%M')})"

@@ -22,6 +22,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'smoking_duration_years',
             'first_cigarette_delay_minutes',
             'pack_price',
+            'currency',
             'cigarettes_per_pack',
             'quit_start_at',
             'triggers',

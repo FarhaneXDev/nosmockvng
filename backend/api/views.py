@@ -83,11 +83,12 @@ class StatsView(APIView):
         seconds = max(0, total_seconds % 60)
 
         # Calcul estimations
-        price_per_cig = float(profile.pack_price) / float(profile.cigarettes_per_pack) if profile.cigarettes_per_pack > 0 else 0.60
+        price_per_cig = float(profile.pack_price) / float(profile.cigarettes_per_pack) if profile.cigarettes_per_pack > 0 else 60.0
         days_fraction = max(0.0, total_seconds / 86400.0) if is_started else 0.0
 
         cigarettes_avoided_est = round(days_fraction * profile.cigarettes_per_day)
-        money_saved_est = round(cigarettes_avoided_est * price_per_cig, 2)
+        raw_saved = cigarettes_avoided_est * price_per_cig
+        money_saved_est = round(raw_saved) if profile.currency == 'FCFA' else round(raw_saved, 2)
 
         # Statistiques envies
         cravings_total = CravingEvent.objects.count()
@@ -161,7 +162,7 @@ class StatsView(APIView):
             "estimates": {
                 "cigarettes_avoided": cigarettes_avoided_est,
                 "money_saved": money_saved_est,
-                "currency": "€",
+                "currency": profile.currency,
                 "daily_cost": profile.daily_cost_estimate(),
             },
             "cravings": {

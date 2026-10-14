@@ -7,7 +7,8 @@ import {
   Flame, 
   BookOpen, 
   Calendar, 
-  Menu
+  Menu,
+  X
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -17,74 +18,107 @@ export default function BottomNav() {
 
   const mainTabs = [
     { href: '/', label: 'Accueil', icon: Home },
-    { href: '/parcours', label: 'Parcours', icon: Calendar },
-    { href: '/sos', label: 'SOS', icon: Flame, isSpecial: true },
     { href: '/journal', label: 'Journal', icon: BookOpen },
+    { href: '/sos', label: 'SOS 10m', icon: Flame, isSpecial: true },
+    { href: '/parcours', label: 'Parcours', icon: Calendar },
   ];
 
   return (
     <>
-      {/* Slide-over menu for extra items on mobile */}
+      {/* Mobile Menu Bottom Sheet */}
       {showMoreMenu && (
         <div 
-          className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm lg:hidden flex flex-col justify-end"
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm lg:hidden flex flex-col justify-end animate-fadeIn"
           onClick={() => setShowMoreMenu(false)}
         >
           <div 
-            className="bg-slate-900 border-t border-slate-800 rounded-t-3xl p-6 space-y-4 max-h-[70vh] overflow-y-auto"
+            className="bg-slate-900 border-t border-slate-800 rounded-t-3xl p-5 space-y-4 max-h-[80vh] overflow-y-auto pb-safe shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="w-12 h-1 bg-slate-700 rounded-full mx-auto mb-2" />
-            <h3 className="text-base font-bold text-white px-2">Navigation complète</h3>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+              <div className="flex items-center gap-2">
+                <span className="text-lg">🌿</span>
+                <h3 className="text-sm font-bold text-white">Menu complet Nosmokvng</h3>
+              </div>
+              <button
+                onClick={() => setShowMoreMenu(false)}
+                className="p-1.5 rounded-lg text-slate-400 hover:text-white bg-slate-800"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2.5">
               <Link 
                 href="/strategies"
                 onClick={() => setShowMoreMenu(false)}
-                className="flex items-center gap-3 p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/60 text-slate-200 hover:text-white"
+                className="flex items-center gap-2.5 p-3 rounded-2xl bg-slate-950/80 border border-slate-800 text-slate-200 active:scale-95 transition-transform"
               >
                 <span className="text-xl">✨</span>
-                <span className="text-sm font-semibold">Stratégies</span>
+                <div>
+                  <span className="text-xs font-bold block text-white">Stratégies</span>
+                  <span className="text-[10px] text-slate-400">Souffle & PAUSE</span>
+                </div>
               </Link>
+
               <Link 
                 href="/checkin"
                 onClick={() => setShowMoreMenu(false)}
-                className="flex items-center gap-3 p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/60 text-slate-200 hover:text-white"
+                className="flex items-center gap-2.5 p-3 rounded-2xl bg-slate-950/80 border border-slate-800 text-slate-200 active:scale-95 transition-transform"
               >
                 <span className="text-xl">📝</span>
-                <span className="text-sm font-semibold">Check-in du jour</span>
+                <div>
+                  <span className="text-xs font-bold block text-white">Check-in</span>
+                  <span className="text-[10px] text-slate-400">Matin & Soir</span>
+                </div>
               </Link>
+
               <Link 
                 href="/faux-pas"
                 onClick={() => setShowMoreMenu(false)}
-                className="flex items-center gap-3 p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/60 text-slate-200 hover:text-white"
+                className="flex items-center gap-2.5 p-3 rounded-2xl bg-slate-950/80 border border-slate-800 text-slate-200 active:scale-95 transition-transform"
               >
                 <span className="text-xl">🤝</span>
-                <span className="text-sm font-semibold">Faux pas / Relance</span>
+                <div>
+                  <span className="text-xs font-bold block text-white">Faux pas</span>
+                  <span className="text-[10px] text-slate-400">Reprise sans honte</span>
+                </div>
               </Link>
+
               <Link 
                 href="/urgence"
                 onClick={() => setShowMoreMenu(false)}
-                className="flex items-center gap-3 p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/60 text-slate-200 hover:text-white"
+                className="flex items-center gap-2.5 p-3 rounded-2xl bg-slate-950/80 border border-slate-800 text-slate-200 active:scale-95 transition-transform"
               >
                 <span className="text-xl">📞</span>
-                <span className="text-sm font-semibold">Aide & Soutien</span>
+                <div>
+                  <span className="text-xs font-bold block text-white">Aide Bénin</span>
+                  <span className="text-[10px] text-slate-400">136, 112 & proche</span>
+                </div>
               </Link>
+
               <Link 
                 href="/parametres"
                 onClick={() => setShowMoreMenu(false)}
-                className="col-span-2 flex items-center gap-3 p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/60 text-slate-200 hover:text-white"
+                className="col-span-2 flex items-center justify-between p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 text-slate-200 active:scale-95 transition-transform"
               >
-                <span className="text-xl">⚙️</span>
-                <span className="text-sm font-semibold">Paramètres & Données</span>
+                <div className="flex items-center gap-2.5">
+                  <span className="text-xl">⚙️</span>
+                  <div>
+                    <span className="text-xs font-bold block text-white">Paramètres & FCFA</span>
+                    <span className="text-[10px] text-slate-400">Prix paquet, fuseau Bénin, export</span>
+                  </div>
+                </div>
+                <span className="text-xs font-bold text-emerald-400">Gérer →</span>
               </Link>
             </div>
           </div>
         </div>
       )}
 
-      {/* Fixed bottom bar on mobile */}
-      <nav className="fixed bottom-0 left-0 right-0 z-40 lg:hidden glass-panel border-t border-slate-800/90 py-2 px-3 backdrop-blur-lg">
-        <div className="flex items-center justify-around">
+      {/* Fixed bottom navigation bar */}
+      <nav className="fixed bottom-0 left-0 right-0 z-40 lg:hidden glass-panel border-t border-slate-800/90 pb-safe backdrop-blur-xl">
+        <div className="flex items-center justify-around h-15 px-2">
           {mainTabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = pathname === tab.href;
@@ -94,12 +128,12 @@ export default function BottomNav() {
                 <Link
                   key={tab.href}
                   href={tab.href}
-                  className="flex flex-col items-center justify-center -mt-6 group"
+                  className="flex flex-col items-center justify-center -mt-5 group"
                 >
-                  <div className="w-13 h-13 rounded-full bg-gradient-to-tr from-rose-600 via-orange-500 to-amber-400 flex items-center justify-center text-white shadow-lg shadow-rose-600/40 p-3 group-hover:scale-105 group-active:scale-95 transition-all">
-                    <Icon className="w-6 h-6 fill-white" />
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-rose-600 via-orange-500 to-amber-400 flex items-center justify-center text-white shadow-lg shadow-rose-600/40 p-2.5 group-hover:scale-105 active:scale-95 transition-transform border-2 border-slate-950">
+                    <Icon className="w-6 h-6 fill-white text-white" />
                   </div>
-                  <span className="text-[11px] font-bold text-rose-400 mt-1">SOS 10 min</span>
+                  <span className="text-[10px] font-black text-rose-400 mt-0.5 tracking-tight">SOS 10 min</span>
                 </Link>
               );
             }
@@ -108,22 +142,22 @@ export default function BottomNav() {
               <Link
                 key={tab.href}
                 href={tab.href}
-                className={`flex flex-col items-center justify-center py-1 px-3 rounded-lg text-xs font-medium transition-colors ${
-                  isActive ? 'text-emerald-400 font-semibold' : 'text-slate-400 hover:text-slate-200'
+                className={`flex flex-col items-center justify-center min-w-[54px] py-1 px-2 rounded-xl transition-colors ${
+                  isActive ? 'text-emerald-400 font-bold' : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
-                <Icon className="w-5 h-5 mb-0.5" />
-                <span>{tab.label}</span>
+                <Icon className={`w-5 h-5 mb-0.5 ${isActive ? 'stroke-[2.5]' : 'stroke-2'}`} />
+                <span className="text-[10px] tracking-tight">{tab.label}</span>
               </Link>
             );
           })}
 
           <button
             onClick={() => setShowMoreMenu(!showMoreMenu)}
-            className="flex flex-col items-center justify-center py-1 px-3 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200"
+            className="flex flex-col items-center justify-center min-w-[54px] py-1 px-2 rounded-xl text-slate-400 hover:text-slate-200"
           >
             <Menu className="w-5 h-5 mb-0.5" />
-            <span>Plus</span>
+            <span className="text-[10px] tracking-tight">Plus</span>
           </button>
         </div>
       </nav>

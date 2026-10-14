@@ -43,26 +43,35 @@ export default function StatCard({ title, value, unit, subtitle, icon = 'Shield'
     valColor: 'text-emerald-400',
   };
 
+  // Format value if number
+  const formattedValue = typeof value === 'number'
+    ? value.toLocaleString('fr-FR')
+    : String(value);
+
   return (
-    <div className={`p-5 rounded-2xl bg-gradient-to-br ${colorStyles.bg} border ${colorStyles.border} transition-all duration-200 shadow-lg`}>
-      <div className="flex items-start justify-between">
-        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+    <div className={`p-3.5 sm:p-5 rounded-2xl bg-gradient-to-br ${colorStyles.bg} border ${colorStyles.border} transition-all duration-200 shadow-md flex flex-col justify-between`}>
+      <div className="flex items-center justify-between gap-1">
+        <span className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider line-clamp-1">
           {title}
         </span>
-        <div className={`p-2 rounded-xl ${colorStyles.iconBg}`}>
-          <IconComponent className="w-5 h-5" />
+        <div className={`p-1.5 sm:p-2 rounded-xl ${colorStyles.iconBg} shrink-0`}>
+          <IconComponent className="w-4 h-4 sm:w-5 sm:h-5" />
         </div>
       </div>
 
-      <div className="mt-3 flex items-baseline gap-1.5">
-        <span className={`text-2xl sm:text-3xl font-black ${colorStyles.valColor} font-mono tracking-tight`}>
-          {value}
+      <div className="mt-2 flex items-baseline gap-1.5 flex-wrap">
+        <span className={`text-xl sm:text-3xl font-black ${colorStyles.valColor} font-mono tracking-tight`}>
+          {formattedValue}
         </span>
-        {unit && <span className="text-sm font-semibold text-slate-300">{unit}</span>}
+        {unit && (
+          <span className="text-xs sm:text-sm font-bold text-slate-300">
+            {unit}
+          </span>
+        )}
       </div>
 
       {subtitle && (
-        <p className="mt-2 text-xs text-slate-400 line-clamp-1">
+        <p className="mt-1.5 text-[10px] sm:text-xs text-slate-400 line-clamp-1">
           {subtitle}
         </p>
       )}

@@ -9,10 +9,10 @@ import {
   CheckCircle2, 
   Flame, 
   Filter, 
-  BarChart2, 
   Clock,
   Sparkles,
-  ArrowRight
+  ArrowRight,
+  X
 } from 'lucide-react';
 import { api } from '@/lib/api';
 import { TRIGGERS_CONFIG } from '@/lib/constants';
@@ -67,7 +67,6 @@ export default function JournalPage() {
       }
 
       setShowAddModal(false);
-      // Reset form
       setNewEmotion('');
       setNewNotes('');
       loadCravings();
@@ -98,26 +97,27 @@ export default function JournalPage() {
     : '0';
 
   return (
-    <div className="space-y-8 animate-fadeIn">
+    <div className="space-y-6 sm:space-y-8 animate-fadeIn pb-12">
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-bold uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-bold uppercase tracking-wider mb-2">
             <BookOpen className="w-3.5 h-3.5" />
             <span>Journal des Envies</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-white">
             Historique & Cartographie des vagues
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400">
+          <p className="text-xs sm:text-sm text-slate-400 mt-1">
             Enregistrez une envie en moins de 30 secondes pour comprendre vos déclencheurs sans jugement.
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        {/* Action Buttons: Full width on mobile */}
+        <div className="w-full sm:w-auto flex flex-col xs:flex-row sm:flex-row items-stretch sm:items-center gap-2.5">
           <Link
             href="/sos"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-orange-500 text-white font-bold text-xs shadow-lg shadow-rose-500/20 hover:scale-105 transition-all"
+            className="flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-gradient-to-r from-rose-500 to-orange-500 text-white font-bold text-xs shadow-lg shadow-rose-500/20 active:scale-95 transition-all text-center"
           >
             <Flame className="w-4 h-4 fill-white" />
             <span>SOS Minuteur 10 min</span>
@@ -125,7 +125,7 @@ export default function JournalPage() {
 
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs shadow-lg shadow-emerald-500/20 hover:scale-105 transition-all"
+            className="flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/20 active:scale-95 transition-all"
           >
             <Plus className="w-4 h-4" />
             <span>Noter une envie (&lt;30s)</span>
@@ -133,50 +133,50 @@ export default function JournalPage() {
         </div>
       </div>
 
-      {/* Summary KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-            Total des envies notées
+      {/* Summary KPI Cards: Mobile Responsive 3-col or 2-col */}
+      <div className="grid grid-cols-3 gap-2.5 sm:gap-4">
+        <div className="p-3.5 sm:p-5 rounded-2xl bg-slate-900 border border-slate-800 text-center sm:text-left">
+          <span className="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider block">
+            Envies
           </span>
-          <div className="mt-2 text-3xl font-black text-white font-mono">
+          <div className="mt-1 text-2xl sm:text-3xl font-black text-white font-mono">
             {totalCravings}
           </div>
-          <p className="text-xs text-slate-400 mt-1">
-            Chaque trace écrite permet d'anticiper la prochaine
+          <p className="text-[10px] text-slate-400 mt-0.5 hidden sm:block">
+            Traces observées
           </p>
         </div>
 
-        <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-            Taux de succès (vagues traversées)
+        <div className="p-3.5 sm:p-5 rounded-2xl bg-slate-900 border border-slate-800 text-center sm:text-left">
+          <span className="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider block">
+            Succès
           </span>
-          <div className="mt-2 text-3xl font-black text-emerald-400 font-mono">
+          <div className="mt-1 text-2xl sm:text-3xl font-black text-emerald-400 font-mono">
             {resistedRate}%
           </div>
-          <p className="text-xs text-slate-400 mt-1">
-            {resistedCount} sur {totalCravings} surmontées sans fumer
+          <p className="text-[10px] text-slate-400 mt-0.5 hidden sm:block">
+            {resistedCount} surmontées
           </p>
         </div>
 
-        <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-            Baisse moyenne d'intensité
+        <div className="p-3.5 sm:p-5 rounded-2xl bg-slate-900 border border-slate-800 text-center sm:text-left">
+          <span className="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider block">
+            Baisse
           </span>
-          <div className="mt-2 text-3xl font-black text-blue-400 font-mono">
-            -{avgDrop} <span className="text-base font-normal text-slate-400">pts</span>
+          <div className="mt-1 text-2xl sm:text-3xl font-black text-blue-400 font-mono">
+            -{avgDrop}
           </div>
-          <p className="text-xs text-slate-400 mt-1">
-            Preuve que la vague redescend naturellement
+          <p className="text-[10px] text-slate-400 mt-0.5 hidden sm:block">
+            Points en moins
           </p>
         </div>
       </div>
 
-      {/* Filter Tabs by Trigger */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
-        <span className="text-xs font-semibold text-slate-400 flex items-center gap-1.5 shrink-0 px-1">
+      {/* Filter Tabs by Trigger (Horizontal Scroll) */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0">
+        <span className="text-xs font-semibold text-slate-400 flex items-center gap-1 shrink-0">
           <Filter className="w-3.5 h-3.5" />
-          <span>Filtrer :</span>
+          <span>Filtre :</span>
         </span>
         <button
           onClick={() => setSelectedFilter('all')}
@@ -208,7 +208,7 @@ export default function JournalPage() {
 
       {/* List of Cravings */}
       {filteredCravings.length === 0 ? (
-        <div className="p-12 text-center rounded-3xl bg-slate-900/60 border border-dashed border-slate-800 space-y-4">
+        <div className="p-8 sm:p-12 text-center rounded-3xl bg-slate-900/60 border border-dashed border-slate-800 space-y-4">
           <div className="text-4xl">🌊</div>
           <h3 className="text-base font-bold text-white">
             Aucune envie enregistrée pour ce filtre
@@ -218,7 +218,7 @@ export default function JournalPage() {
           </p>
           <button
             onClick={() => setShowAddModal(true)}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs transition-colors"
           >
             <Plus className="w-4 h-4" />
             <span>Enregistrer ma première envie</span>
@@ -228,7 +228,9 @@ export default function JournalPage() {
         <div className="space-y-3">
           {filteredCravings.map((craving) => {
             const triggerInfo = TRIGGERS_CONFIG[craving.trigger] || TRIGGERS_CONFIG.autre;
+            // Format date with Benin Timezone Africa/Porto-Novo
             const dateStr = new Date(craving.occurred_at).toLocaleDateString('fr-FR', {
+              timeZone: 'Africa/Porto-Novo',
               day: 'numeric',
               month: 'short',
               hour: '2-digit',
@@ -238,28 +240,30 @@ export default function JournalPage() {
             return (
               <div
                 key={craving.id}
-                className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                className="p-4 sm:p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4"
               >
-                <div className="space-y-1.5 flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${triggerInfo.color}`}>
-                      {triggerInfo.label}
-                    </span>
+                <div className="space-y-1.5 flex-1 w-full">
+                  <div className="flex flex-wrap items-center justify-between sm:justify-start gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${triggerInfo.color}`}>
+                        {triggerInfo.label}
+                      </span>
 
-                    <span className="text-xs text-slate-400 flex items-center gap-1">
+                      {craving.outcome === 'resisted' ? (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">
+                          Surmontée
+                        </span>
+                      ) : (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-400 border border-amber-500/20">
+                          Faux pas analysé
+                        </span>
+                      )}
+                    </div>
+
+                    <span className="text-[11px] text-slate-400 flex items-center gap-1 font-mono">
                       <Clock className="w-3 h-3 text-slate-500" />
-                      <span>{dateStr}</span>
+                      <span>{dateStr} (WAT)</span>
                     </span>
-
-                    {craving.outcome === 'resisted' ? (
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">
-                        Surmontée
-                      </span>
-                    ) : (
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-400 border border-amber-500/20">
-                        Faux pas analysé
-                      </span>
-                    )}
                   </div>
 
                   {craving.emotion && (
@@ -276,20 +280,20 @@ export default function JournalPage() {
                 </div>
 
                 {/* Intensities badge & Actions */}
-                <div className="flex items-center gap-4 shrink-0 self-end sm:self-center">
+                <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto shrink-0 pt-2 sm:pt-0 border-t border-slate-800/60 sm:border-t-0">
                   <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono">
                     <span className="text-rose-400 font-bold">
-                      Avant : {craving.intensity_before}/10
+                      {craving.intensity_before}/10
                     </span>
                     <span className="text-slate-600">→</span>
                     <span className="text-emerald-400 font-bold">
-                      Après : {craving.intensity_after ?? craving.intensity_before}/10
+                      {craving.intensity_after ?? craving.intensity_before}/10
                     </span>
                   </div>
 
                   <button
                     onClick={() => handleDeleteCraving(craving.id)}
-                    className="p-2 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-slate-800 transition-colors"
+                    className="p-2 rounded-xl text-slate-500 hover:text-rose-400 hover:bg-slate-800 transition-colors"
                     title="Supprimer"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -301,30 +305,33 @@ export default function JournalPage() {
         </div>
       )}
 
-      {/* QUICK LOG MODAL (< 30s) */}
+      {/* QUICK LOG BOTTOM-SHEET / MODAL (< 30s) */}
       {showAddModal && (
         <div 
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4"
           onClick={() => setShowAddModal(false)}
         >
           <div 
-            className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-lg w-full space-y-6 shadow-2xl max-h-[90vh] overflow-y-auto"
+            className="bg-slate-900 border border-slate-800 rounded-t-3xl sm:rounded-3xl p-5 sm:p-8 max-w-lg w-full space-y-5 shadow-2xl max-h-[92vh] overflow-y-auto pb-safe"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+            {/* Sheet Handle for mobile */}
+            <div className="w-12 h-1.5 bg-slate-700 rounded-full mx-auto sm:hidden -mt-1 mb-2" />
+
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div>
-                <h3 className="text-lg font-bold text-white">
-                  Enregistrer une envie rapidement
+                <h3 className="text-base sm:text-lg font-bold text-white">
+                  Noter une envie en &lt; 30 secondes
                 </h3>
-                <p className="text-xs text-slate-400">
-                  Moins de 30 secondes · Zéro texte obligatoire
+                <p className="text-[11px] sm:text-xs text-slate-400">
+                  Zéro texte obligatoire · Rapide et sans jugement
                 </p>
               </div>
               <button
                 onClick={() => setShowAddModal(false)}
-                className="text-slate-400 hover:text-white text-xl font-bold p-1"
+                className="text-slate-400 hover:text-white p-2 rounded-full hover:bg-slate-800 transition-colors"
               >
-                ✕
+                <X className="w-5 h-5" />
               </button>
             </div>
 
@@ -337,7 +344,7 @@ export default function JournalPage() {
                 <select
                   value={newTrigger}
                   onChange={(e) => setNewTrigger(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white focus:outline-none focus:border-emerald-500"
                 >
                   {Object.entries(TRIGGERS_CONFIG).map(([k, v]) => (
                     <option key={k} value={k}>
@@ -348,9 +355,9 @@ export default function JournalPage() {
               </div>
 
               {/* Intensity Before */}
-              <div className="space-y-1">
+              <div className="space-y-1 p-3 rounded-xl bg-slate-950/60 border border-slate-800">
                 <div className="flex justify-between text-xs">
-                  <span className="font-semibold text-slate-300">Intensité ressentie au départ :</span>
+                  <span className="font-semibold text-slate-300">Intensité ressentie au pic :</span>
                   <span className="font-mono font-bold text-rose-400">{newIntensityBefore}/10</span>
                 </div>
                 <input
@@ -364,7 +371,7 @@ export default function JournalPage() {
               </div>
 
               {/* Intensity After */}
-              <div className="space-y-1">
+              <div className="space-y-1 p-3 rounded-xl bg-slate-950/60 border border-slate-800">
                 <div className="flex justify-between text-xs">
                   <span className="font-semibold text-slate-300">Intensité après quelques minutes :</span>
                   <span className="font-mono font-bold text-emerald-400">{newIntensityAfter}/10</span>
@@ -394,7 +401,7 @@ export default function JournalPage() {
                         : 'bg-slate-950/50 border-slate-800 text-slate-400'
                     }`}
                   >
-                    ✅ Envie traversée
+                    ✅ Traversée
                   </button>
                   <button
                     type="button"
@@ -405,7 +412,7 @@ export default function JournalPage() {
                         : 'bg-slate-950/50 border-slate-800 text-slate-400'
                     }`}
                   >
-                    ⚠️ Cigarette fumée (faux pas)
+                    ⚠️ Cigarette fumée
                   </button>
                 </div>
               </div>
@@ -417,7 +424,7 @@ export default function JournalPage() {
                 </label>
                 <input
                   type="text"
-                  placeholder="Ex : Stress du travail, Solitude du soir, Frustration..."
+                  placeholder="Ex : Stress, Solitude, Frustration..."
                   value={newEmotion}
                   onChange={(e) => setNewEmotion(e.target.value)}
                   className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-emerald-500"
@@ -431,25 +438,25 @@ export default function JournalPage() {
                 </label>
                 <textarea
                   rows={2}
-                  placeholder="Ex : Boire un grand verre d'eau et faire 10 pas a suffi..."
+                  placeholder="Ex : Boire de l'eau et marcher 5 min a suffi..."
                   value={newNotes}
                   onChange={(e) => setNewNotes(e.target.value)}
                   className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-emerald-500 resize-none"
                 />
               </div>
 
-              <div className="flex justify-end gap-3 pt-3 border-t border-slate-800">
+              <div className="flex flex-col-reverse sm:flex-row justify-end gap-2.5 pt-3 border-t border-slate-800">
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2.5 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold hover:bg-slate-700 transition-colors"
+                  className="w-full sm:w-auto px-4 py-3 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold hover:bg-slate-700 transition-colors"
                 >
                   Annuler
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 text-xs font-extrabold shadow-lg shadow-emerald-500/30 transition-all hover:scale-105"
+                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 text-xs font-black shadow-lg shadow-emerald-500/30 transition-all hover:scale-105"
                 >
                   {submitting ? 'Enregistrement...' : 'Enregistrer l’envie'}
                 </button>

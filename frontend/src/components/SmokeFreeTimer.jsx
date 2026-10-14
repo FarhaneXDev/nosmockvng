@@ -12,8 +12,25 @@ export default function SmokeFreeTimer({ quitDateString }) {
     isPast: true,
   });
 
+  const [formattedDate, setFormattedDate] = useState('');
+
   useEffect(() => {
-    const target = quitDateString ? new Date(quitDateString) : new Date('2026-10-14T08:00:00');
+    const target = quitDateString ? new Date(quitDateString) : new Date('2026-10-14T08:00:00+01:00');
+
+    // Format target date with Benin / local timezone
+    try {
+      const options = {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Africa/Porto-Novo'
+      };
+      setFormattedDate(target.toLocaleDateString('fr-FR', options));
+    } catch (e) {
+      setFormattedDate(target.toLocaleString('fr-FR'));
+    }
 
     const update = () => {
       const now = new Date();
@@ -37,83 +54,75 @@ export default function SmokeFreeTimer({ quitDateString }) {
   const pad = (n) => String(n).padStart(2, '0');
 
   return (
-    <div className="relative overflow-hidden rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-slate-900/90 via-slate-850 to-emerald-950/40 border border-emerald-500/20 shadow-2xl">
-      {/* Decorative background glow */}
-      <div className="absolute -right-16 -top-16 w-56 h-56 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -left-16 -bottom-16 w-56 h-56 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl p-4 sm:p-7 bg-gradient-to-br from-slate-900 via-slate-850 to-emerald-950/40 border border-emerald-500/20 shadow-xl">
+      {/* Background glow */}
+      <div className="absolute -right-12 -top-12 w-40 h-40 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
 
-      <div className="relative z-10">
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+      <div className="relative z-10 space-y-4">
+        {/* Top status indicator */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="flex h-3 w-3 relative">
+            <span className="flex h-2.5 w-2.5 relative">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
             </span>
-            <span className="text-xs font-semibold uppercase tracking-wider text-emerald-400">
-              {timeLeft.isPast ? 'Temps de liberté conquis' : 'Compte à rebours avant le grand départ'}
+            <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-emerald-400">
+              {timeLeft.isPast ? 'Temps sans cigarette' : 'Départ de votre arrêt'}
             </span>
           </div>
 
-          <div className="text-xs text-slate-400 flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5 text-slate-400" />
-            <span>
-              Départ : {new Date(quitDateString || '2026-10-14T08:00:00').toLocaleDateString('fr-FR', {
-                weekday: 'short',
-                day: 'numeric',
-                month: 'short',
-                hour: '2-digit',
-                minute: '2-digit'
-              })}
-            </span>
+          <div className="text-[11px] text-slate-400 flex items-center gap-1.5">
+            <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+            <span>Début : {formattedDate || '14 oct. 2026, 08:00 (WAT Bénin)'}</span>
           </div>
         </div>
 
-        {/* Counter Display */}
-        <div className="grid grid-cols-4 gap-2 sm:gap-4 max-w-2xl mx-auto">
+        {/* 4 Counter Boxes - Ultra mobile responsive */}
+        <div className="grid grid-cols-4 gap-1.5 sm:gap-3 max-w-xl mx-auto">
           {/* Days */}
-          <div className="flex flex-col items-center justify-center p-3 sm:p-5 rounded-2xl bg-slate-900/80 border border-slate-700/60 shadow-inner">
-            <span className="text-3xl sm:text-5xl font-black text-white font-mono tracking-tight">
+          <div className="flex flex-col items-center justify-center p-2 sm:p-4 rounded-xl sm:rounded-2xl bg-slate-950/80 border border-slate-800 shadow-inner">
+            <span className="text-xl sm:text-4xl font-black text-white font-mono tracking-tight leading-none">
               {timeLeft.days}
             </span>
-            <span className="text-[11px] sm:text-xs font-medium text-slate-400 mt-1 uppercase tracking-wider">
+            <span className="text-[9px] sm:text-[11px] font-semibold text-slate-400 mt-1 uppercase tracking-wider">
               {timeLeft.days <= 1 ? 'Jour' : 'Jours'}
             </span>
           </div>
 
           {/* Hours */}
-          <div className="flex flex-col items-center justify-center p-3 sm:p-5 rounded-2xl bg-slate-900/80 border border-slate-700/60 shadow-inner">
-            <span className="text-3xl sm:text-5xl font-black text-white font-mono tracking-tight">
+          <div className="flex flex-col items-center justify-center p-2 sm:p-4 rounded-xl sm:rounded-2xl bg-slate-950/80 border border-slate-800 shadow-inner">
+            <span className="text-xl sm:text-4xl font-black text-white font-mono tracking-tight leading-none">
               {pad(timeLeft.hours)}
             </span>
-            <span className="text-[11px] sm:text-xs font-medium text-slate-400 mt-1 uppercase tracking-wider">
+            <span className="text-[9px] sm:text-[11px] font-semibold text-slate-400 mt-1 uppercase tracking-wider">
               Heures
             </span>
           </div>
 
           {/* Minutes */}
-          <div className="flex flex-col items-center justify-center p-3 sm:p-5 rounded-2xl bg-slate-900/80 border border-slate-700/60 shadow-inner">
-            <span className="text-3xl sm:text-5xl font-black text-white font-mono tracking-tight">
+          <div className="flex flex-col items-center justify-center p-2 sm:p-4 rounded-xl sm:rounded-2xl bg-slate-950/80 border border-slate-800 shadow-inner">
+            <span className="text-xl sm:text-4xl font-black text-white font-mono tracking-tight leading-none">
               {pad(timeLeft.minutes)}
             </span>
-            <span className="text-[11px] sm:text-xs font-medium text-slate-400 mt-1 uppercase tracking-wider">
-              Minutes
+            <span className="text-[9px] sm:text-[11px] font-semibold text-slate-400 mt-1 uppercase tracking-wider">
+              Min
             </span>
           </div>
 
           {/* Seconds */}
-          <div className="flex flex-col items-center justify-center p-3 sm:p-5 rounded-2xl bg-emerald-950/40 border border-emerald-500/30 shadow-inner">
-            <span className="text-3xl sm:text-5xl font-black text-emerald-400 font-mono tracking-tight">
+          <div className="flex flex-col items-center justify-center p-2 sm:p-4 rounded-xl sm:rounded-2xl bg-emerald-950/50 border border-emerald-500/40 shadow-inner">
+            <span className="text-xl sm:text-4xl font-black text-emerald-400 font-mono tracking-tight leading-none">
               {pad(timeLeft.seconds)}
             </span>
-            <span className="text-[11px] sm:text-xs font-medium text-emerald-400/80 mt-1 uppercase tracking-wider">
-              Secondes
+            <span className="text-[9px] sm:text-[11px] font-semibold text-emerald-400/90 mt-1 uppercase tracking-wider">
+              Sec
             </span>
           </div>
         </div>
 
-        <p className="text-center text-xs sm:text-sm text-slate-300 mt-6 flex items-center justify-center gap-1.5">
-          <Sparkles className="w-4 h-4 text-emerald-400" />
-          <span>Chaque seconde sans fumée permet à votre organisme de se réparer.</span>
+        <p className="text-center text-[11px] sm:text-xs text-slate-300 flex items-center justify-center gap-1.5 pt-1">
+          <Sparkles className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+          <span>Chaque minute sans tabac régénère votre souffle.</span>
         </p>
       </div>
     </div>

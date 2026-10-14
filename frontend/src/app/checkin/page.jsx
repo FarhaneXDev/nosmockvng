@@ -16,6 +16,14 @@ import {
 import { api } from '@/lib/api';
 import confetti from 'canvas-confetti';
 
+const MOODS = [
+  { val: 1, emoji: '😔', label: 'Difficile' },
+  { val: 2, emoji: '😐', label: 'Tendu' },
+  { val: 3, emoji: '🙂', label: 'Stable' },
+  { val: 4, emoji: '😊', label: 'Bien' },
+  { val: 5, emoji: '🚀', label: 'Fort' },
+];
+
 export default function CheckinPage() {
   const [activeTab, setActiveTab] = useState('morning'); // 'morning' or 'evening'
   const [loading, setLoading] = useState(true);
@@ -90,7 +98,9 @@ export default function CheckinPage() {
     }
   };
 
+  // Date with Benin Timezone Africa/Porto-Novo
   const todayStr = new Date().toLocaleDateString('fr-FR', {
+    timeZone: 'Africa/Porto-Novo',
     weekday: 'long',
     day: 'numeric',
     month: 'long',
@@ -98,25 +108,25 @@ export default function CheckinPage() {
   });
 
   return (
-    <div className="max-w-2xl mx-auto space-y-8 animate-fadeIn">
+    <div className="max-w-2xl mx-auto space-y-6 sm:space-y-8 animate-fadeIn pb-12">
       {/* Header */}
       <div className="text-center space-y-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-bold uppercase tracking-wider">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-bold uppercase tracking-wider">
           <CheckCircle2 className="w-3.5 h-3.5" />
           <span>Suivi Quotidien</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-black text-white capitalize">
           {todayStr}
         </h1>
-        <p className="text-xs sm:text-sm text-slate-400">
+        <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto">
           Un point d’ancrage rapide le matin pour anticiper, un débriefing bienveillant le soir pour consolider.
         </p>
 
-        {/* Tab Toggle */}
-        <div className="flex items-center justify-center p-1 rounded-2xl bg-slate-900 border border-slate-800 max-w-xs mx-auto mt-4">
+        {/* Tab Toggle: Touch-friendly full width */}
+        <div className="flex items-center justify-center p-1 rounded-2xl bg-slate-900 border border-slate-800 max-w-sm mx-auto mt-4">
           <button
             onClick={() => setActiveTab('morning')}
-            className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-bold transition-all ${
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'morning'
                 ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-md'
                 : 'text-slate-400 hover:text-white'
@@ -127,7 +137,7 @@ export default function CheckinPage() {
           </button>
           <button
             onClick={() => setActiveTab('evening')}
-            className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-bold transition-all ${
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'evening'
                 ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 shadow-md'
                 : 'text-slate-400 hover:text-white'
@@ -140,7 +150,7 @@ export default function CheckinPage() {
       </div>
 
       {/* Main Form */}
-      <form onSubmit={handleSave} className="p-6 sm:p-8 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-2xl space-y-6">
+      <form onSubmit={handleSave} className="p-4 sm:p-8 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-2xl space-y-6">
         {activeTab === 'morning' ? (
           <div className="space-y-5 animate-fadeIn">
             <div className="border-b border-slate-800 pb-3">
@@ -174,7 +184,7 @@ export default function CheckinPage() {
               </label>
               <input
                 type="text"
-                placeholder="Ex : La pause de 10h au travail, la soirée avec des amis, le retour chez soi seul..."
+                placeholder="Ex : La pause de 10h au travail, la sortie en terrasse..."
                 value={morningRisk}
                 onChange={(e) => setMorningRisk(e.target.value)}
                 className="w-full p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white focus:outline-none focus:border-emerald-500"
@@ -188,7 +198,7 @@ export default function CheckinPage() {
               </label>
               <input
                 type="text"
-                placeholder="Ex : Garder un stylo en main, boire une infusion mentholée, marcher 5 min..."
+                placeholder="Ex : Garder un stylo en main, boire de l'eau fraîche, marcher 5 min..."
                 value={morningStrategy}
                 onChange={(e) => setMorningStrategy(e.target.value)}
                 className="w-full p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white focus:outline-none focus:border-emerald-500"
@@ -222,13 +232,13 @@ export default function CheckinPage() {
                     className="w-full p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white font-mono font-bold focus:outline-none focus:border-emerald-500"
                   />
                   {eveningCigarettes === 0 ? (
-                    <span className="text-xs font-bold text-emerald-400 px-2.5 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 whitespace-nowrap">
+                    <span className="text-xs font-bold text-emerald-400 px-3 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 whitespace-nowrap">
                       🎉 0 cig
                     </span>
                   ) : (
                     <Link
                       href="/faux-pas"
-                      className="text-xs text-amber-400 underline whitespace-nowrap"
+                      className="text-xs text-amber-400 underline whitespace-nowrap font-semibold"
                     >
                       Analyser
                     </Link>
@@ -251,30 +261,25 @@ export default function CheckinPage() {
               </div>
             </div>
 
-            {/* Mood Rating */}
+            {/* Mood Rating: Responsive 5-grid */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold uppercase tracking-wider text-slate-300">
                 Mon humeur générale aujourd'hui :
               </label>
-              <div className="flex gap-2">
-                {[
-                  { val: 1, label: 'Difficile 😔' },
-                  { val: 2, label: 'Tendu 😐' },
-                  { val: 3, label: 'Stable 🙂' },
-                  { val: 4, label: 'Bien 😊' },
-                  { val: 5, label: 'Conquérant 🚀' },
-                ].map((item) => (
+              <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
+                {MOODS.map((item) => (
                   <button
                     key={item.val}
                     type="button"
                     onClick={() => setMoodRating(item.val)}
-                    className={`flex-1 py-2 rounded-xl text-xs font-bold border transition-all ${
+                    className={`flex flex-col items-center justify-center p-2 rounded-xl border transition-all ${
                       moodRating === item.val
-                        ? 'bg-emerald-500/20 border-emerald-500 text-white'
-                        : 'bg-slate-950/40 border-slate-800 text-slate-400'
+                        ? 'bg-emerald-500/20 border-emerald-500 text-white shadow-md'
+                        : 'bg-slate-950/40 border-slate-800 text-slate-400 hover:border-slate-700'
                     }`}
                   >
-                    {item.label}
+                    <span className="text-lg sm:text-xl">{item.emoji}</span>
+                    <span className="text-[10px] sm:text-xs font-bold mt-1 leading-tight">{item.label}</span>
                   </button>
                 ))}
               </div>
@@ -287,7 +292,7 @@ export default function CheckinPage() {
               </label>
               <textarea
                 rows={2}
-                placeholder="Ex : J'ai remarqué qu'à 16h mon envie n'était pas de la nicotine mais juste un besoin d'étirement..."
+                placeholder="Ex : J'ai remarqué qu'à 16h mon envie était juste un besoin de boire de l'eau..."
                 value={eveningLearning}
                 onChange={(e) => setEveningLearning(e.target.value)}
                 className="w-full p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-emerald-500 resize-none"
@@ -311,18 +316,19 @@ export default function CheckinPage() {
         )}
 
         {/* Submit button */}
-        <div className="flex items-center justify-between pt-4 border-t border-slate-800">
-          {savedSuccess && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-slate-800">
+          {savedSuccess ? (
             <span className="text-xs text-emerald-400 font-bold flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4" />
               <span>Enregistré avec succès !</span>
             </span>
+          ) : (
+            <div />
           )}
-          {!savedSuccess && <div />}
 
           <button
             type="submit"
-            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs shadow-lg shadow-emerald-500/25 transition-all hover:scale-105"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/25 transition-all hover:scale-105 active:scale-95"
           >
             <Save className="w-4 h-4" />
             <span>Enregistrer mon check-in</span>

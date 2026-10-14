@@ -238,8 +238,8 @@ JOURNEY_DATA = [
         "day_number": 17,
         "phase_title": "Phase 4 : Maîtrise des Risques (Semaine 3)",
         "title": "La liberté financière",
-        "summary": "À 15 cigarettes par jour, vous avez déjà économisé plus de 150 euros en un peu plus de deux semaines !",
-        "action_today": "Vérifiez votre compteur d'économies et projetez ce que vous ferez de ces économies sur un an (~3 200 €).",
+        "summary": "À 15 cigarettes par jour, vous avez déjà économisé plus de 15 000 FCFA en un peu plus de deux semaines !",
+        "action_today": "Vérifiez votre compteur d'économies et projetez ce que vous ferez de ces économies sur un an (~320 000 FCFA).",
         "mantra": "Mon argent sert mes projets de vie, pas l'industrie du tabac."
     },
     {
@@ -409,18 +409,21 @@ def seed_all():
         for r_data in REMINDERS_DATA:
             Reminder.objects.create(**r_data)
 
-    # 4. Profil utilisateur par défaut (basé sur le PDF : 14 octobre 2026 08:00, 15 cig/jour, 3 ans, 12€/paquet)
-    if UserProfile.objects.count() == 0:
-        default_quit_date = datetime(2026, 10, 14, 8, 0, 0, tzinfo=timezone.get_current_timezone())
-        UserProfile.objects.create(
-            cigarettes_per_day=15,
-            smoking_duration_years=3.0,
-            first_cigarette_delay_minutes=45,
-            pack_price=12.00,
-            cigarettes_per_pack=20,
-            quit_start_at=default_quit_date,
-            triggers=["stress", "nervosite", "emotion_brusque", "solitude", "reveil", "travail", "repas", "main_bouche"],
-            trusted_contact_name="Ami de confiance",
-            trusted_contact_phone="",
-            privacy_consent=True
-        )
+    # 4. Profil utilisateur par défaut (adapté pour le Bénin : 14 octobre 2026 08:00 WAT, 15 cig/jour, 3 ans, 1 200 FCFA/paquet)
+    default_quit_date = datetime(2026, 10, 14, 8, 0, 0, tzinfo=timezone.get_current_timezone())
+    UserProfile.objects.update_or_create(
+        id=1,
+        defaults={
+            "cigarettes_per_day": 15,
+            "smoking_duration_years": 3.0,
+            "first_cigarette_delay_minutes": 45,
+            "pack_price": 1200.00,
+            "currency": "FCFA",
+            "cigarettes_per_pack": 20,
+            "quit_start_at": default_quit_date,
+            "triggers": ["stress", "nervosite", "emotion_brusque", "solitude", "reveil", "travail", "repas", "main_bouche"],
+            "trusted_contact_name": "Ami de confiance",
+            "trusted_contact_phone": "",
+            "privacy_consent": True
+        }
+    )
