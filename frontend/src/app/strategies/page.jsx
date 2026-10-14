@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import BreathingBubble from '@/components/BreathingBubble';
 import { api } from '@/lib/api';
-import { TRIGGERS_CONFIG } from '@/lib/constants';
+import { TRIGGERS_CONFIG, DEFAULT_STRATEGIES } from '@/lib/constants';
 
 const ICON_MAP = {
   Timer: Flame,
@@ -34,7 +34,7 @@ const ICON_MAP = {
 };
 
 export default function StrategiesPage() {
-  const [strategies, setStrategies] = useState([]);
+  const [strategies, setStrategies] = useState(DEFAULT_STRATEGIES);
   const [selectedTag, setSelectedTag] = useState('all');
   const [interactiveMode, setInteractiveMode] = useState(null); // 'breathing', 'pause', 'anchoring'
 

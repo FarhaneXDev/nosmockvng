@@ -1,4 +1,12 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api';
+import { DEFAULT_JOURNEY_DAYS, DEFAULT_STRATEGIES } from './constants';
+
+const getApiBase = () => {
+  if (process.env.NEXT_PUBLIC_API_URL) return process.env.NEXT_PUBLIC_API_URL;
+  if (typeof window !== 'undefined' && window.location && window.location.hostname) {
+    return `http://${window.location.hostname}:8000/api`;
+  }
+  return 'http://127.0.0.1:8000/api';
+};
 
 // Helper for local storage persistence as resilient fallback/cache
 const getLocal = (key, defaultVal) => {
@@ -19,8 +27,9 @@ const setLocal = (key, val) => {
 };
 
 async function fetchWithFallback(endpoint, options = {}, localKey, defaultFallback) {
+  const apiBase = getApiBase();
   try {
-    const res = await fetch(`${API_BASE}${endpoint}`, {
+    const res = await fetch(`${apiBase}${endpoint}`, {
       ...options,
       headers: {
         'Content-Type': 'application/json',
@@ -38,10 +47,14 @@ async function fetchWithFallback(endpoint, options = {}, localKey, defaultFallba
     // Return cached/local fallback if available
     if (localKey) {
       const cached = getLocal(localKey, defaultFallback);
-      if (cached !== undefined) return cached;
+      if (cached !== undefined && cached !== null) {
+        if (Array.isArray(defaultFallback) && Array.isArray(cached) && cached.length === 0 && defaultFallback.length > 0) {
+          return defaultFallback;
+        }
+        return cached;
+      }
     }
-    if (defaultFallback !== undefined) return defaultFallback;
-    throw err;
+    return defaultFallback;
   }
 }
 
@@ -50,20 +63,20 @@ export const api = {
   getProfile: async () => {
     return fetchWithFallback('/profile/', {}, 'profile', null);
   },
-  updateProfile: async (data) => {
-    setLocal('profile', { ...getLocal('profile', {}), ...data });
+  updateProfile: async (profileData) => {
+    setLocal('profile', { ...getLocal('profile', {}), ...profileData });
     return fetchWithFallback('/profile/', {
       method: 'PUT',
-      body: JSON.stringify(data),
+      body: JSON.stringify(profileData),
     }, 'profile');
   },
 
-  // Statistiques temps réel
+  // Stats
   getStats: async () => {
     return fetchWithFallback('/stats/', {}, 'stats', null);
   },
 
-  // Envies (Cravings)
+  // Journal des envies (Cravings)
   getCravings: async (trigger = null) => {
     const query = trigger ? `?trigger=${encodeURIComponent(trigger)}` : '';
     return fetchWithFallback(`/cravings/${query}`, {}, 'cravings', []);
@@ -112,7 +125,7 @@ export const api = {
   // Stratégies
   getStrategies: async (trigger = null) => {
     const query = trigger ? `?trigger=${encodeURIComponent(trigger)}` : '';
-    return fetchWithFallback(`/strategies/${query}`, {}, 'strategies', []);
+    return fetchWithFallback(`/strategies/${query}`, {}, 'strategies', DEFAULT_STRATEGIES);
   },
 
   // Faux pas (Relapse)
@@ -151,10 +164,10 @@ export const api = {
 
   // Parcours 30 jours
   getJourney: async () => {
-    return fetchWithFallback('/journey/', {}, 'journey', []);
+    return fetchWithFallback('/journey/', {}, 'journey', DEFAULT_JOURNEY_DAYS);
   },
   toggleJourneyDay: async (dayNumber) => {
-    const journey = getLocal('journey', []);
+    const journey = getLocal('journey', DEFAULT_JOURNEY_DAYS);
     const updated = journey.map(d => d.day_number === dayNumber ? { ...d, completed: !d.completed } : d);
     setLocal('journey', updated);
     return fetchWithFallback(`/journey/${dayNumber}/toggle/`, { method: 'POST' });
@@ -162,7 +175,7 @@ export const api = {
 
   // Exportation & Réinitialisation
   exportDataUrl: (format = 'json') => {
-    return `${API_BASE}/export/?format=${format}`;
+    return `${getApiBase()}/export/?format=${format}`;
   },
   resetData: async () => {
     if (typeof window !== 'undefined') {

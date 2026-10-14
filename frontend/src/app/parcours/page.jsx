@@ -13,13 +13,14 @@ import {
   Flame
 } from 'lucide-react';
 import { api } from '@/lib/api';
+import { DEFAULT_JOURNEY_DAYS } from '@/lib/constants';
 import confetti from 'canvas-confetti';
 
 export default function ParcoursPage() {
-  const [days, setDays] = useState([]);
+  const [days, setDays] = useState(DEFAULT_JOURNEY_DAYS);
   const [selectedPhase, setSelectedPhase] = useState('all');
-  const [activeDay, setActiveDay] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [activeDay, setActiveDay] = useState(DEFAULT_JOURNEY_DAYS[0]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function loadJourney() {
