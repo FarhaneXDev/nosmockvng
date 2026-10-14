@@ -24,7 +24,7 @@ export default function OnboardingPage() {
 
   // State with Benin defaults
   const [cigarettesPerDay, setCigarettesPerDay] = useState(15);
-  const [packPrice, setPackPrice] = useState(1200);
+  const [packPrice, setPackPrice] = useState(700);
   const [currency, setCurrency] = useState('FCFA');
   const [smokingYears, setSmokingYears] = useState(3.0);
   const [firstDelay, setFirstDelay] = useState(45);
@@ -147,6 +147,9 @@ export default function OnboardingPage() {
                     onChange={(e) => setPackPrice(parseFloat(e.target.value) || 0)}
                     className="w-full p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white font-mono font-bold focus:outline-none focus:border-emerald-500"
                   />
+                  <span className="text-[10px] text-slate-400 block">
+                    💡 Paquet à 700 FCFA (soit 3 cigarettes pour 100 FCFA au détail)
+                  </span>
                 </div>
 
                 <div className="space-y-1.5">

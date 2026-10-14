@@ -140,6 +140,11 @@ export default function ParametresPage() {
               onChange={(e) => setProfile({ ...profile, pack_price: parseFloat(e.target.value) || 0 })}
               className="w-full p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white font-mono font-bold focus:outline-none focus:border-emerald-500"
             />
+            {cur === 'FCFA' && (
+              <span className="text-[10px] text-slate-400 block">
+                💡 Paquet à 700 FCFA (soit 3 cigarettes pour 100 FCFA au détail)
+              </span>
+            )}
           </div>
 
           {/* Cigarettes per day */}

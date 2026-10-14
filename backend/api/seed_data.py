@@ -409,7 +409,7 @@ def seed_all():
         for r_data in REMINDERS_DATA:
             Reminder.objects.create(**r_data)
 
-    # 4. Profil utilisateur par défaut (adapté pour le Bénin : 14 octobre 2026 08:00 WAT, 15 cig/jour, 3 ans, 1 200 FCFA/paquet)
+    # 4. Profil utilisateur par défaut (adapté pour le Bénin : 14 octobre 2026 08:00 WAT, 15 cig/jour, 3 ans, 700 FCFA/paquet / 3 pour 100 FCFA)
     default_quit_date = datetime(2026, 10, 14, 8, 0, 0, tzinfo=timezone.get_current_timezone())
     UserProfile.objects.update_or_create(
         id=1,
@@ -417,7 +417,7 @@ def seed_all():
             "cigarettes_per_day": 15,
             "smoking_duration_years": 3.0,
             "first_cigarette_delay_minutes": 45,
-            "pack_price": 1200.00,
+            "pack_price": 700.00,
             "currency": "FCFA",
             "cigarettes_per_pack": 20,
             "quit_start_at": default_quit_date,

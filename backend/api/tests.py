@@ -19,7 +19,7 @@ class NosmokvngAPITests(TestCase):
         """Vérifie les calculs d'économies et de cigarettes évitées."""
         profile = UserProfile.objects.first()
         self.assertEqual(profile.cigarettes_per_day, 15)
-        self.assertEqual(float(profile.pack_price), 1200.0)
+        self.assertEqual(float(profile.pack_price), 700.0)
         self.assertEqual(profile.currency, 'FCFA')
         
         # Test endpoint stats

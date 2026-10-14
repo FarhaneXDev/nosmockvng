@@ -2,7 +2,7 @@ export const DEFAULT_USER_PROFILE = {
   cigarettes_per_day: 15,
   smoking_duration_years: 3.0,
   first_cigarette_delay_minutes: 45,
-  pack_price: 1200,
+  pack_price: 700,
   currency: 'FCFA',
   cigarettes_per_pack: 20,
   quit_start_at: "2026-10-14T08:00:00",

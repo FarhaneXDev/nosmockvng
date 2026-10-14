@@ -14,8 +14,8 @@ class UserProfile(models.Model):
     smoking_duration_years = models.DecimalField(max_digits=4, decimal_places=1, default=3.0, help_text="Nombre d'années de tabagisme")
     first_cigarette_delay_minutes = models.PositiveIntegerField(default=45, help_text="Délai moyen après le réveil (minutes)")
     
-    # Coût et monnaie (par défaut FCFA pour le Bénin)
-    pack_price = models.DecimalField(max_digits=10, decimal_places=2, default=1200.00, help_text="Prix moyen du paquet en monnaie locale")
+    # Coût et monnaie (par défaut FCFA pour le Bénin : paquet à 700 FCFA, soit 3 cig pour 100 FCFA)
+    pack_price = models.DecimalField(max_digits=10, decimal_places=2, default=700.00, help_text="Prix moyen du paquet en monnaie locale")
     currency = models.CharField(max_length=10, default="FCFA", help_text="Monnaie utilisée (ex: FCFA, EUR, USD)")
     cigarettes_per_pack = models.PositiveIntegerField(default=20, help_text="Nombre de cigarettes par paquet")
     
